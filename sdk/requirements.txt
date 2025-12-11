@@ -1,0 +1,8 @@
+traceloop-sdk>=0.47.5,<0.49.0
+opentelemetry-instrumentation-fastapi>=0.50b0
+pydantic>=2.8.2
+python-dotenv
+botocore
+setuptools
+packaging
+git+ssh://git@github.ibm.com/agent-analytics/common.git@main

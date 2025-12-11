@@ -1,0 +1,365 @@
+/* Carbon Design System inspired styles */
+
+/* Import IBM Plex Sans Font */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Primary colors */
+  --carbon-blue-60: #0f62fe;
+  --carbon-blue-70: #0353e9;
+  --carbon-blue-80: #002d9c;
+  
+  /* Gray scale */
+  --carbon-gray-10: #f4f4f4;
+  --carbon-gray-20: #e0e0e0;
+  --carbon-gray-30: #c6c6c6;
+  --carbon-gray-40: #a8a8a8;
+  --carbon-gray-50: #8d8d8d;
+  --carbon-gray-60: #6f6f6f;
+  --carbon-gray-70: #525252;
+  --carbon-gray-80: #393939;
+  --carbon-gray-90: #262626;
+  --carbon-gray-100: #161616;
+  
+  /* Status colors */
+  --carbon-red-60: #da1e28;
+  --carbon-green-60: #24a148;
+  --carbon-yellow-30: #f1c21b;
+  
+  /* Spacing */
+  --carbon-spacing-xs: 0.25rem;
+  --carbon-spacing-sm: 0.5rem;
+  --carbon-spacing-md: 1rem;
+  --carbon-spacing-lg: 1.5rem;
+  --carbon-spacing-xl: 2rem;
+  --carbon-spacing-xxl: 3rem;
+}
+
+/* Base styles */
+body {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--carbon-gray-100);
+  background-color: var(--carbon-gray-10);
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  margin-top: 0;
+  margin-bottom: var(--carbon-spacing-md);
+  color: var(--carbon-gray-100);
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+/* Button styles */
+.carbon-btn {
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 0;
+  font-size: 0.875rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0.38, 0.9);
+}
+
+.carbon-btn:focus {
+  outline: 2px solid var(--carbon-blue-60);
+  outline-offset: -2px;
+}
+
+.carbon-btn--primary {
+  background-color: var(--carbon-blue-60);
+  color: white;
+}
+
+.carbon-btn--primary:hover {
+  background-color: var(--carbon-blue-70);
+}
+
+.carbon-btn--primary:active {
+  background-color: var(--carbon-blue-80);
+}
+
+.carbon-btn--secondary {
+  background-color: var(--carbon-gray-80);
+  color: white;
+}
+
+.carbon-btn--secondary:hover {
+  background-color: var(--carbon-gray-70);
+}
+
+.carbon-btn--secondary:active {
+  background-color: var(--carbon-gray-60);
+}
+
+.carbon-btn--ghost {
+  background-color: transparent;
+  color: var(--carbon-blue-60);
+}
+
+.carbon-btn--ghost:hover {
+  background-color: var(--carbon-gray-20);
+}
+
+.carbon-btn--ghost:active {
+  background-color: var(--carbon-gray-30);
+}
+
+.carbon-btn:disabled {
+  background-color: var(--carbon-gray-30);
+  color: var(--carbon-gray-60);
+  cursor: not-allowed;
+}
+
+/* Form elements */
+.carbon-input {
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--carbon-gray-50);
+  border-radius: 0;
+  background-color: white;
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.875rem;
+  color: var(--carbon-gray-100);
+}
+
+.carbon-input:focus {
+  outline: 2px solid var(--carbon-blue-60);
+  outline-offset: -2px;
+  border-color: var(--carbon-blue-60);
+}
+
+.carbon-input::placeholder {
+  color: var(--carbon-gray-50);
+}
+
+.carbon-input:disabled {
+  background-color: var(--carbon-gray-20);
+  border-color: var(--carbon-gray-30);
+  color: var(--carbon-gray-60);
+  cursor: not-allowed;
+}
+
+/* Checkbox */
+.carbon-checkbox {
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid var(--carbon-gray-50);
+  background-color: white;
+  position: relative;
+  cursor: pointer;
+}
+
+.carbon-checkbox:checked {
+  background-color: var(--carbon-blue-60);
+  border-color: var(--carbon-blue-60);
+}
+
+.carbon-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 25%;
+  top: 10%;
+  width: 40%;
+  height: 60%;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.carbon-checkbox:focus {
+  outline: 2px solid var(--carbon-blue-60);
+  outline-offset: -2px;
+}
+
+/* Tables */
+.carbon-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.carbon-table th,
+.carbon-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--carbon-gray-20);
+}
+
+.carbon-table th {
+  font-weight: 600;
+  color: var(--carbon-gray-70);
+  background-color: var(--carbon-gray-10);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1px;
+}
+
+.carbon-table tr:hover {
+  background-color: var(--carbon-gray-10);
+}
+
+/* Modal styles */
+.carbon-modal {
+  background-color: white;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carbon-modal__header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--carbon-gray-20);
+}
+
+.carbon-modal__title {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.carbon-modal__content {
+  padding: 1rem;
+}
+
+.carbon-modal__footer {
+  padding: 1rem;
+  border-top: 1px solid var(--carbon-gray-20);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+/* Tag styles */
+.carbon-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.75rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1;
+  border-radius: 0;
+  background-color: var(--carbon-gray-20);
+  color: var(--carbon-gray-80);
+}
+
+.carbon-tag--green {
+  background-color: rgba(36, 161, 72, 0.2);
+  color: var(--carbon-green-60);
+}
+
+.carbon-tag--red {
+  background-color: rgba(218, 30, 40, 0.2);
+  color: var(--carbon-red-60);
+}
+
+.carbon-tag--yellow {
+  background-color: rgba(241, 194, 27, 0.2);
+  color: var(--carbon-gray-100);
+}
+
+.carbon-tag--blue {
+  background-color: rgba(15, 98, 254, 0.2);
+  color: var(--carbon-blue-70);
+}
+
+/* Animation classes */
+.carbon-fade-in {
+  animation: carbon-fade-in 0.2s cubic-bezier(0, 0, 0.38, 0.9) forwards;
+}
+
+.carbon-fade-out {
+  animation: carbon-fade-out 0.2s cubic-bezier(0.2, 0, 1, 0.9) forwards;
+}
+
+.carbon-slide-in {
+  animation: carbon-slide-in 0.3s cubic-bezier(0, 0, 0.38, 0.9) forwards;
+}
+
+.carbon-slide-out {
+  animation: carbon-slide-out 0.2s cubic-bezier(0.2, 0, 1, 0.9) forwards;
+}
+
+@keyframes carbon-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes carbon-fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes carbon-slide-in {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes carbon-slide-out {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+/* Box shadow utilities */
+.carbon-shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.carbon-shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carbon-shadow-lg {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Specific component styles for traces UI */
+.trace-selection-modal {
+  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  border-radius: 0;
+}
+
+.trace-filter-panel {
+  border-right: 1px solid var(--carbon-gray-20);
+}
+
+.trace-checkbox {
+  border-radius: 0;
+}
+
+.trace-status-tag {
+  border-radius: 0;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.trace-row-selected {
+  background-color: rgba(15, 98, 254, 0.1);
+}
+
+.trace-search {
+  border-radius: 0;
+}
+
+.trace-group-button {
+  border-radius: 0;
+}

@@ -1,0 +1,16 @@
+# proxy-config.yaml
+# Configuration for multi-tenant Jaeger-Elasticsearch proxy
+
+# Default tenant to use when tenant_id is not found
+default_tenant: 10000000-0000-0000-0000-000000000000
+
+# Tenant configurations
+tenants:
+
+  10000000-0000-0000-0000-000000000000:
+    store_type: elasticsearch    
+    hostname: "http://localhost:9200"
+    username: "elastic"
+    password: "changeme"
+    index_prefix: "10000000-0000-0000-0000-000000000000"
+

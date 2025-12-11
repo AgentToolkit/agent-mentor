@@ -1,0 +1,221 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-analytics"
+version = "0.17.1"
+description = "Backend analytics platform for agentic AI applications"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "IBM Research"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    # Web Framework & API
+    "starlette>=0.49.1",
+    "fastapi==0.120.1",
+    "uvicorn==0.32.1",
+    "python-multipart",
+    # Data & Analytics
+    "pydantic>=2.8.2",
+    "pydantic-settings==2.6.1",
+    "numpy==1.26.4",
+    "pandas==2.1.4",
+    "polars>=0.20.0",
+    "networkx==3.4.2",
+    "changepy==0.4.0",
+    "scikit-learn==1.7.2",
+    "sentence-transformers==5.1.0",
+    
+    # LangChain & AI
+    "langchain==0.3.17",
+    "langgraph>=0.2.56",
+    "langchain-text-splitters>=0.3.9",
+    
+    # HTTP & Network
+    "urllib3~=2.5.0",
+    "aiohttp~=3.12.15",
+    "python-dateutil==2.9.0.post0",
+    # Database & Storage
+    "sqlalchemy>=1.4.0",
+    "psycopg2-binary>=2.9.0",
+    "motor==3.6.0",
+    "elasticsearch==8.*",
+    "opensearch-py==2.8.0",
+    # Security & Auth
+    "PyJWT",
+    "cryptography",
+    "passlib",
+    "bcrypt",
+    "xmlsec==1.3.14",
+    "python3-saml",
+    # Observability & Tracing
+    "opentelemetry-exporter-otlp",
+    "traceloop-sdk==0.44.3",
+    "langtrace-python-sdk==3.8.3",
+    # Utilities
+    "python-dotenv==1.0.1",
+    "lxml==5.3.2",
+    "pymarkdownlnt",    
+    # AgentOps Commons
+    "ibm-agent-analytics-common==0.1.6",
+]
+
+[project.optional-dependencies]
+extensions = [
+    # 3rd party extensions
+   
+]
+
+dev = [
+    # Testing
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "httpx>=0.25.0",
+    "langfuse>=2.0.0",
+    # Linting & Formatting
+    "ruff>=0.10.0",
+    "mypy>=1.7.0",
+    # Development Tools
+    "pre-commit>=3.5.0",
+    "ipython>=8.0.0",
+    "jupyter>=1.0.0",
+]
+
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "httpx>=0.25.0",
+]
+
+docs = [
+    "mkdocs>=1.5.0",
+    "mkdocs-material>=9.4.0",
+    "mkdocstrings[python]>=0.24.0",
+]
+
+[project.scripts]
+agent-analytics = "agent_analytics.server.main:main"
+
+# Ruff configuration
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings  
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "N",   # pep8-naming
+]
+ignore = [
+    "E501",  # line too long, handled by formatter
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint.isort]
+known-first-party = ["agent_analytics"]
+
+# MyPy configuration
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+disallow_untyped_defs = true  
+disallow_incomplete_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+strict_optional = true
+show_error_codes = true
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = [
+    "changepy.*",
+    "traceloop_sdk.*",
+    "langtrace_python_sdk.*",
+    "langfuse.*",
+    "flasgger.*",
+    "xmlsec.*",
+    "python3_saml.*",
+    "cytoscape.*",
+    "dagre.*",
+]
+ignore_missing_imports = true
+
+# Pytest configuration  
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = [
+    "--import-mode=importlib",
+    "--strict-markers", 
+    "--strict-config",
+    "--cov=agent_analytics",
+    "--cov-report=term-missing",
+    "--cov-report=html:htmlcov",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+    "unit: marks tests as unit tests",
+    "platform: marks tests for platform component",
+    "extensions: marks tests for extensions component",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["agent_analytics"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/.venv/*",
+    "*/node_modules/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError", 
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+show_missing = true
+skip_covered = false
+
+# Build configuration for src layout
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_analytics"]
+
+# Allow direct Git references
+[tool.hatch.metadata]
+allow-direct-references = true

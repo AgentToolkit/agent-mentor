@@ -1,0 +1,44 @@
+{
+  "name": "agent-analytics-backend",
+  "version": "0.17.1",
+  "description": "Backend analytics platform for agentic AI applications",
+  "private": true,
+  "scripts": {    
+    "dev": "npm run build:frontend && npm run dev:backend",
+    "dev:extensions": "ENABLE_EXTENSIONS=true npm run dev",
+    "dev:memory": "TENANT_CONFIG_FILE=./proxy-config-memory.yaml npm run dev",
+    "dev:memory:extensions": "TENANT_CONFIG_FILE=./proxy-config-memory.yaml ENABLE_EXTENSIONS=true npm run dev",
+    "dev:full": "npm run build:frontend && concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:quick": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd src/agent_analytics/client && npm run dev && cd ../../../",
+    "dev:backend": "uv run uvicorn agent_analytics.server.main:app --reload --host 0.0.0.0 --port 8765",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd src/agent_analytics/client && npm run build && cd ../../../",
+    "build:backend": "uv build",
+    "test": "npm run test:frontend && npm run test:platform && npm run test:extensions",
+    "test:frontend": "cd src/agent_analytics/client && npm test",
+    "test:platform": "uv run pytest tests/platform/",
+    "test:extensions": "uv run pytest tests/extensions/",
+    "test:e2e": "cd tests/cypress && npx cypress run",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:frontend": "cd src/agent_analytics/client && npm run lint",
+    "lint:backend": "uv run ruff check src/agent_analytics/",
+    "lint:fix": "uv run ruff check --fix src/agent_analytics/",
+    "format": "npm run format:frontend && npm run format:backend",
+    "format:frontend": "cd src/agent_analytics/client && npm run format",
+    "format:backend": "uv run ruff format src/agent_analytics/",
+    "setup": "uv sync && npm install && cd src/agent_analytics/client && npm install && cd ../../../",
+    "setup:dev": "uv sync --extra dev && npm install && cd src/agent_analytics/client && npm install && cd ../../../",
+    "setup:extensions": "uv sync --extra dev --extra extensions && npm install && cd src/agent_analytics/client && npm install && cd ../../../",
+    "clean": "rm -rf src/agent_analytics/client/build src/agent_analytics/client/node_modules node_modules .venv",
+    "reset_db:artifacts": "./docker/cleanup_db_artifacts.sh",
+    "reset_db:full": "./docker/cleanup_db_full.sh"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=9.0.0"
+  }
+}
