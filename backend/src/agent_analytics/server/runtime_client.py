@@ -55,6 +55,7 @@ class RuntimeClient:
 
     TASK_ANALYTICS = "task_analytics"
     EVAL_METRICS = "eval_metrics"
+    WORKFLOW_ANALYTICS = "workflow_analytics"
     PATTERN_ANNOTATION_ANALYTICS = "pattern_annotation_analytics"
     ISSUE_ANALYTICS = "issue_analytics"
     ANNOTATION_ANALYTICS = "annotation_analytics"
@@ -63,6 +64,7 @@ class RuntimeClient:
     DRIFT_ANALYTICS = "drift_analytics"
     CYCLE_ANALYTICS = "cycles_detection_analytics"
     ISSUE_DIST_ANALYTICS = "trace_issue_distribution"
+    WORKFLOW_METRIC_ANALYTICS = "workflow_metric_analytics"
     TASK_METRIC_ANALYTICS = "task_metrics_analytics"
 
     STATUS_RUNNING = "RUNNING"
@@ -201,8 +203,25 @@ class RuntimeClient:
                 )
             ))
 
-        
-        
+        analytics_metadata.append(AnalyticsMetadata(
+            id=RuntimeClient.WORKFLOW_ANALYTICS,
+            name="Workflow Analytics",
+            description="Calculate workflow for traces",
+            version="1.0",
+            owner="analytics_team",
+            status=Status.ACTIVE,
+            template=TemplateConfig(
+                runtime=RuntimeConfig(
+                    type=RuntimeType.PYTHON,
+                    config={"module_path": "agent_analytics.extensions.causal_discovery.causal_discovery_light_plugin"}
+                ),
+                controller=ControllerConfig(
+                    trigger_config={"type": TriggerType.DIRECT},
+                    dependsOn=[] #RuntimeClient.TASK_METRIC_ANALYTICS
+                ),
+                config={},
+            )
+        ))
 
         analytics_metadata.append(AnalyticsMetadata(
             id=RuntimeClient.ISSUE_ANALYTICS,
@@ -307,7 +326,38 @@ class RuntimeClient:
             )
         ))
 
-       
+        analytics_metadata.append(AnalyticsMetadata(
+            id=RuntimeClient.WORKFLOW_METRIC_ANALYTICS,
+            name="Trace Issue Distribution Metric",
+            description="Calculate issue distribution per severity for each task in a trace",
+            version="1.0",
+            owner="analytics_team",
+            status=Status.ACTIVE,
+            template=TemplateConfig(
+                runtime=RuntimeConfig(
+                    type=RuntimeType.PYTHON,
+                    config={"module_path": "agent_analytics.extensions.workflow.workflow_metric_plugin"}
+                ),
+                controller=ControllerConfig(
+                    trigger_config={"type": TriggerType.DIRECT},
+                    dependsOn=[]  # RuntimeClient.WORKFLOW_ANALYTICS
+                ),
+                config={"list_numeric_metrics": \
+                        [("Number of visits", "Num_Visits", 'Count'), \
+                        ("Execution time", "Execution_Time", 'Seconds'), \
+                        ("LLM calls", "LLM_Calls", 'Count'), \
+                        ("Tool calls","Tool_Calls", 'Count'), \
+                        ("Subtasks", "Subtasks", 'Count'), \
+                        ("Maximal subtree", "Width", 'Width'), \
+                        ("Input tokens", "Input_Tokens", 'Count'), \
+                        ("Output tokens", "Output_Tokens", 'Count'), \
+                        ("Total tokens", "Total_Tokens", 'Count')], \
+                            "list_distribution_metrics" : \
+                            [("Tool distribution", "Tool_Distribution"),\
+                            ("Issue distribution in task", "Issue_Distribution")]
+                     },
+            )
+        ))
 
         for metadata in analytics_metadata:
             analytics = await tenant_components.registry.get_analytics(metadata.id)
@@ -470,15 +520,15 @@ class RuntimeClient:
         for trace in traces_for_group:
             group_tasks.extend(await self._get_or_create_task(tenant_components, trace.element_id))
             # task workflow is discarded on the task level - group workflow will be created below
-           
+            workflow, failure = await self._get_or_create_workflow(tenant_components, trace.element_id, False)
 
             ### TODO: revisit when applying metrics
             ### For now - there is no need to fetch the issues/metrics as they will be fetched per trace
             # group_metrics.extend(await self.get_trace_metrics(trace.element_id))
             # group_issues.extend(await self._get_or_create_issues(tenant_components, trace.element_id, False))
 
-       
-        
+        merged_workflows, actions= await self._get_or_create_workflow(tenant_components, group_id=group_id)
+        group_metrics = await self._get_metric_for_workflow_nodes(tenant_components, group_id=group_id)
         # group = await tenant_components.data_manager.get_by_id(group_id, TraceGroup)
         # formatted_group = await self.format_group(group, traces_for_group)
         if len(traces_for_group) >= self.change_analytics_config["min_observations"]:
@@ -502,7 +552,8 @@ class RuntimeClient:
 
         return {
             "traces": formatted_traces,
-            "metrics": [metric.model_dump() for metric in group_metrics],            
+            "metrics": [metric.model_dump() for metric in group_metrics],
+            "workflows": merged_workflows,
             "tasks": [task.model_dump() for task in group_tasks],
             "issues": [issue.model_dump() for issue in group_issues],
             "error": failure
@@ -642,11 +693,98 @@ class RuntimeClient:
 
 
 
-    
+    async def _get_or_create_workflow(self, tenant_components: TenantComponents, trace_id=None, group_id=None,should_fail=True):
+        if trace_id:
+            workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, trace_id)
+        else:
+            workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, group_id)
+        if not workflow_obj:
+            input_model_class = await tenant_components.registry.get_pipeline_input_model(RuntimeClient.WORKFLOW_ANALYTICS)
+            if trace_id:
+                result = await tenant_components.executor.execute_analytics(
+                    RuntimeClient.WORKFLOW_ANALYTICS,
+                    input_model_class(trace_id=trace_id)
+                )
+            else:
+                result = await tenant_components.executor.execute_analytics(
+                    RuntimeClient.WORKFLOW_ANALYTICS,
+                    input_model_class(trace_group_id=group_id)
+                )
+            ### TODO:  Validate failure/Success by status
+            if result.error != None:
+                print(result.error.message)
+                print(result.error.stacktrace)
+                if should_fail:
+                    raise Exception(result.error.message)
+                else:
+                    return None, result.error.message
+
+            if trace_id:
+                workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, trace_id)
+            else:
+                workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, group_id)
+
+        workflow_obj = workflow_obj[0] # !!!?
+        workflow = await transform_workflow(workflow_obj)
+        return workflow, None
 
 
 
-    
+    async def _get_metric_for_workflow_nodes(self, tenant_components: TenantComponents, trace_id: str = None, group_id: str = None):
+        # Always fetch workflow first
+        if trace_id:
+            workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, trace_id)
+        else:
+            workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, group_id)
+
+        nodes = await workflow_obj[0].workflow_nodes
+        nodes_metrics = [await node.metrics for node in nodes]
+
+        # Check if workflow metrics analytics has already run successfully
+        key = trace_id if trace_id else group_id
+        exec_results = await tenant_components.executor.execution_results_data_manager.get_results_by_trace_or_group_id(
+            RuntimeClient.WORKFLOW_METRIC_ANALYTICS,
+            [key]
+        )
+
+        has_run_successfully = False
+        if key in exec_results:
+            has_run_successfully = any(
+                result.status == ExecutionStatus.SUCCESS
+                for result in exec_results[key]
+            )
+
+        if not has_run_successfully:
+            input_model_class = await tenant_components.registry.get_pipeline_input_model(
+                RuntimeClient.WORKFLOW_METRIC_ANALYTICS
+            )
+
+            if trace_id:
+                result = await tenant_components.executor.execute_analytics(
+                    RuntimeClient.WORKFLOW_METRIC_ANALYTICS,
+                    input_model_class(trace_id=trace_id, trace_workflow=workflow_obj[0].model_dump())
+                )
+            else:
+                result = await tenant_components.executor.execute_analytics(
+                    RuntimeClient.WORKFLOW_METRIC_ANALYTICS,
+                    input_model_class(trace_group_id=group_id, trace_workflow=workflow_obj[0].model_dump())
+                )
+
+            if result.error is not None:
+                print(result.error.message)
+                print(result.error.stacktrace)
+                raise Exception(result.error)
+
+            # Re-fetch workflow to get updated metrics
+            if trace_id:
+                workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, trace_id)
+            else:
+                workflow_obj = await BaseTraceComposite.get_all_workflows_for_trace(tenant_components.data_manager, group_id)
+
+            nodes = await workflow_obj[0].workflow_nodes
+            nodes_metrics = [await node.metrics for node in nodes]
+
+        return [metric for metric_list in nodes_metrics for metric in metric_list]
 
     # ### TODO: @Inna Should move this logic to platform!!!
     # def _filter_by_type(self, elements: List[BaseArtifact], type_name: Type[T]) -> List[T]:
@@ -742,7 +880,7 @@ class RuntimeClient:
 
 
             #print(annoations)
-            
+            workflow, _ = await self._get_or_create_workflow(tenant_components, trace_id)
 
             #trace = BaseTrace(element_id=trace_id, name=trace_id)
             issues, _ = await self._get_or_create_issues(tenant_components, trace_id)
@@ -753,7 +891,7 @@ class RuntimeClient:
             metrics = await self.get_trace_metrics(trace_id, tenant_id=tenant_id)
 
 
-           
+            group_metrics = await self._get_metric_for_workflow_nodes(tenant_components, trace_id=trace_id)
             advanced_status = RuntimeClient.STATUS_NOT_STARTED
             if metrics != None and len(metrics) > 0:
                 for metric in metrics:
@@ -765,12 +903,13 @@ class RuntimeClient:
                 "advanced": advanced_status,
             }
 
-            full_metrics = metrics 
+            full_metrics = metrics + group_metrics
 
             return {
                     "spans": [span.model_dump() for span in spans] if spans else None,
                     "tasks": [task.model_dump() for task in tasks],
-                    "metrics": [metric.model_dump() for metric in full_metrics],                    
+                    "metrics": [metric.model_dump() for metric in full_metrics],
+                    "workflow": workflow,
                     "issues": [issue.model_dump() for issue in issues],
                     "trajectory" : annoations,
                     "analysisStatus": analysis_status
@@ -785,7 +924,8 @@ class RuntimeClient:
                     "error": "No tasks found for the provided trace.",
                     "spans": [span.model_dump() for span in spans] if spans else None,
                     "tasks": [task.model_dump() for task in tasks] if tasks else [],
-                    "metrics": [],                    
+                    "metrics": [],
+                    "workflow": [],
                     "issues": [],
                     "trajectory" : [],
                     "analysisStatus": analysis_status
@@ -1000,7 +1140,8 @@ class RuntimeClient:
                 'serviceName': trace.service_name,
                 'spansNum': trace.num_of_spans,
                 'tasks': artifacts[trace.element_id]["tasks"] if "tasks" in artifacts[trace.element_id] else None,
-                'spans': artifacts[trace.element_id]["spans"] if "spans" in artifacts[trace.element_id] else None,                
+                'spans': artifacts[trace.element_id]["spans"] if "spans" in artifacts[trace.element_id] else None,
+                'workflow': artifacts[trace.element_id]["workflow"] if "workflow" in artifacts[trace.element_id] else None,
                 'error': artifacts[trace.element_id]["error"] if "error" in artifacts[trace.element_id] else None
             }
 

@@ -148,7 +148,7 @@ export const MainContent = ({
   useEffect(() => {
     let newTabs = isEmbedded
       ? ["tasks", "workflow", "trajectory"]
-      : ["tasks", "spans", "eval", "issues", "trajectory"];
+      : ["tasks", "spans", "workflow", "eval", "issues", "trajectory"];
 
     // Remove "eval" if extensions are enabled
     if (!dataFetching.extensionsEnabled) {
