@@ -1,6 +1,6 @@
 from collections import Counter, defaultdict
 
-from ibm_agent_analytics_common.interfaces.issues import IssueLevel
+from agent_analytics_common.interfaces.issues import IssueLevel
 
 from agent_analytics.core.data_composite.issue import BaseIssue
 from agent_analytics.core.data_composite.task import TaskComposite

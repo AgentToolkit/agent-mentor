@@ -1,7 +1,7 @@
 import json
 from typing import Any, ClassVar
 
-from ibm_agent_analytics_common.interfaces.recommendations import (
+from agent_analytics_common.interfaces.recommendations import (
     Recommendation,
     RecommendationLevel,
 )
@@ -122,7 +122,7 @@ class RecommendationComposite(RelatableElementComposite[RecommendationData]):
 # base_recommendation.py
 from typing import ClassVar
 
-from ibm_agent_analytics_common.interfaces.recommendations import (
+from agent_analytics_common.interfaces.recommendations import (
     RecommendationLevel,
 )
 

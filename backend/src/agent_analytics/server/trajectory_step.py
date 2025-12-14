@@ -1,6 +1,6 @@
 
-from ibm_agent_analytics_common.interfaces.annotations import DataAnnotation
-from ibm_agent_analytics_common.interfaces.elements import Element
+from agent_analytics_common.interfaces.annotations import DataAnnotation
+from agent_analytics_common.interfaces.elements import Element
 from pydantic import BaseModel, Field
 
 

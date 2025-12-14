@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import ClassVar
 
-from ibm_agent_analytics_common.interfaces.metric import MetricType
+from agent_analytics_common.interfaces.metric import MetricType
 
 from agent_analytics.core.data.trace_data import BaseTraceData
 from agent_analytics.core.data_composite.annotation import AnnotationComposite

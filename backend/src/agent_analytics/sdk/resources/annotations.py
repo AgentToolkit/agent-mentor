@@ -6,7 +6,7 @@ Provides methods for creating and querying annotations.
 
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.annotations import DataAnnotation
+from agent_analytics_common.interfaces.annotations import DataAnnotation
 
 from agent_analytics.core.data_composite.annotation import AnnotationComposite, BaseAnnotation
 from agent_analytics.runtime.storage.logical_data_manager import AnalyticsDataManager

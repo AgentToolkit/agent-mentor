@@ -1,7 +1,7 @@
 import json
 from typing import Any, ClassVar
 
-from ibm_agent_analytics_common.interfaces.annotations import DataAnnotation
+from agent_analytics_common.interfaces.annotations import DataAnnotation
 from pydantic import Field
 
 from agent_analytics.core.data.annotation_data import AnnotationData

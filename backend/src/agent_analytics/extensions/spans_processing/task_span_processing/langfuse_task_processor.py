@@ -2,7 +2,7 @@ from typing import Any
 
 from agent_analytics.core.data_composite.base_span import BaseSpanComposite
 from agent_analytics.core.data_composite.task import HierarchicalTask
-from ibm_agent_analytics_common.interfaces.task import TaskTag
+from agent_analytics_common.interfaces.task import TaskTag
 from agent_analytics.extensions.spans_processing.config.const import *
 from agent_analytics.extensions.spans_processing.task_span_processing.base_task_processor import (
     BaseTaskGraphVisitor,

@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any, ClassVar
 
-from ibm_agent_analytics_common.interfaces.issues import Issue, IssueLevel
+from agent_analytics_common.interfaces.issues import Issue, IssueLevel
 from pydantic import Field
 
 from agent_analytics.core.data.issue_data import IssueData

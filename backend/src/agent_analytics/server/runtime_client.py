@@ -5,7 +5,7 @@ from typing import Any
 
 import yaml
 from dotenv import load_dotenv
-from ibm_agent_analytics_common.interfaces.metric import AggregateMetric
+from agent_analytics_common.interfaces.metric import AggregateMetric
 
 from agent_analytics.core.data.span_data import SpanEvent, SpanKind
 from agent_analytics.core.data_composite.base_span import BaseSpanComposite

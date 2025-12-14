@@ -6,7 +6,7 @@ Provides methods for creating and querying metrics.
 
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.metric import (
+from agent_analytics_common.interfaces.metric import (
     MetricType as InternalMetricType,
 )
 

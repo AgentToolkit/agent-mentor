@@ -4,7 +4,7 @@ from agent_analytics.core.data_composite.base_span import BaseSpanComposite
 from agent_analytics.core.data_composite.task import HierarchicalTask
 from agent_analytics.extensions.spans_processing.common.utils import *
 from agent_analytics.extensions.spans_processing.config.const import *
-from ibm_agent_analytics_common.interfaces.task import TaskTag
+from agent_analytics_common.interfaces.task import TaskTag
 
 
 class SpanProcessingUtils:

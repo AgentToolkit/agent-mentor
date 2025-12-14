@@ -1,5 +1,5 @@
 
-from ibm_agent_analytics_common.interfaces.issues import Issue
+from agent_analytics_common.interfaces.issues import Issue
 
 from agent_analytics.core.data.relatable_element_data import RelatableElementData
 

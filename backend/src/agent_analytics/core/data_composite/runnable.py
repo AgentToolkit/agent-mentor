@@ -2,7 +2,7 @@
 import json
 from typing import Any, ClassVar
 
-from ibm_agent_analytics_common.interfaces.runnable import Runnable
+from agent_analytics_common.interfaces.runnable import Runnable
 from pydantic import Field
 
 from agent_analytics.core.data.element_data import ElementData

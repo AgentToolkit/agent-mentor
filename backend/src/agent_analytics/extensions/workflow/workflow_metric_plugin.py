@@ -2,7 +2,7 @@ from collections import Counter
 from typing import Any
 
 import numpy as np
-from ibm_agent_analytics_common.interfaces.metric import AggregatedStats
+from agent_analytics_common.interfaces.metric import AggregatedStats
 from pydantic import BaseModel, Field
 
 from src.core.data.action_data import ActionData

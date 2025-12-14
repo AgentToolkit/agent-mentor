@@ -9,7 +9,7 @@ from agent_analytics.extensions.spans_processing.span_processor import SpanProce
 from agent_analytics.extensions.spans_processing.task_span_processing.span_utils import (
     SpanProcessingUtils,
 )
-from ibm_agent_analytics_common.interfaces.task import TaskTag
+from agent_analytics_common.interfaces.task import TaskTag
 
 
 class BaseTaskGraphVisitor(SpanProcessor, ABC):

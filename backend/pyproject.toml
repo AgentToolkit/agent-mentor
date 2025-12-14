@@ -67,8 +67,8 @@ dependencies = [
     "python-dotenv==1.0.1",
     "lxml==5.3.2",
     "pymarkdownlnt",    
-    # AgentOps Commons
-    "ibm-agent-analytics-common==0.1.6",
+    # AgentOps Commons (local package)
+    "agent-analytics-common @ {root:uri}/../common",
 ]
 
 [project.optional-dependencies]

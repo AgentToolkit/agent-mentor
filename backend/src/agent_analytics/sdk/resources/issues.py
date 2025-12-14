@@ -6,7 +6,7 @@ Provides methods for creating and querying issues.
 
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.issues import IssueLevel
+from agent_analytics_common.interfaces.issues import IssueLevel
 
 from agent_analytics.core.data_composite.issue import BaseIssue, IssueComposite
 from agent_analytics.runtime.storage.logical_data_manager import AnalyticsDataManager

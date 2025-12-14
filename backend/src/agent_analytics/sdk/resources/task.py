@@ -7,7 +7,7 @@ Provides methods for querying and creating tasks.
 from datetime import datetime
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.task import Task, TaskStatus
+from agent_analytics_common.interfaces.task import Task, TaskStatus
 from agent_analytics.core.data.task_data import TaskData
 from agent_analytics.core.data_composite.task import HierarchicalTask, TaskComposite
 from agent_analytics.runtime.storage.logical_data_manager import AnalyticsDataManager

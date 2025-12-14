@@ -3,7 +3,7 @@ from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from typing import TextIO
 
-from ibm_agent_analytics_common.interfaces.issues import IssueLevel
+from agent_analytics_common.interfaces.issues import IssueLevel
 
 from agent_analytics.core.data.span_data import BaseSpanData
 from agent_analytics.core.data.trace_data import BaseTraceData

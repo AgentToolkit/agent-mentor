@@ -3,8 +3,8 @@ from collections import defaultdict
 from datetime import UTC, datetime
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.issues import IssueLevel
-from ibm_agent_analytics_common.interfaces.metric import (
+from agent_analytics_common.interfaces.issues import IssueLevel
+from agent_analytics_common.interfaces.metric import (
     AggregatedStats,
     AggregateMetric,
     BasicStatsMetric,

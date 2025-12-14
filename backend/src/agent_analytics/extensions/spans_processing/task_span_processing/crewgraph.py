@@ -1,7 +1,7 @@
 from collections import OrderedDict
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.graph import Graph
+from agent_analytics_common.interfaces.graph import Graph
 from pydantic import BaseModel, Field
 
 from agent_analytics.extensions.spans_processing.common.utils import *

@@ -1,6 +1,6 @@
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.graph import Graph
+from agent_analytics_common.interfaces.graph import Graph
 
 from agent_analytics.core.data_composite.base_span import BaseSpanComposite
 from agent_analytics.core.data_composite.task import HierarchicalTask

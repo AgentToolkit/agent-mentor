@@ -10,7 +10,7 @@ from agent_analytics.extensions.spans_processing.task_span_processing.crewgraph 
 from agent_analytics.extensions.spans_processing.task_span_processing.graph_operations import (
     GraphOperationsMixin,
 )
-from ibm_agent_analytics_common.interfaces.task import TaskTag
+from agent_analytics_common.interfaces.task import TaskTag
 
 
 class CrewAITaskGraphVisitor(BaseTaskGraphVisitor, GraphOperationsMixin):

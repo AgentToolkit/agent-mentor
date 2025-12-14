@@ -1,7 +1,7 @@
 from datetime import UTC, datetime
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.annotations import DataAnnotation
+from agent_analytics_common.interfaces.annotations import DataAnnotation
 from pydantic import BaseModel, Field
 
 from agent_analytics.core.data.base_data_manager import DataManager

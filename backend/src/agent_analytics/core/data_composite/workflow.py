@@ -1,7 +1,7 @@
 import json
 from typing import Any, ClassVar
 
-from ibm_agent_analytics_common.interfaces.relatable_element import RelatableElement
+from agent_analytics_common.interfaces.relatable_element import RelatableElement
 from pydantic import Field
 
 from agent_analytics.core.data.workflow_data import WorkflowData

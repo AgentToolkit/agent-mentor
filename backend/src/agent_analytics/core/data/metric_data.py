@@ -1,6 +1,6 @@
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.metric import Metric, MetricScope
+from agent_analytics_common.interfaces.metric import Metric, MetricScope
 from pydantic import Field
 
 from agent_analytics.core.data.relatable_element_data import RelatableElementData

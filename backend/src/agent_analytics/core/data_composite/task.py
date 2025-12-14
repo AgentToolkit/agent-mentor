@@ -1,14 +1,14 @@
 import uuid
 from datetime import datetime
-from typing import Any, ClassVar, Optional, List
+from typing import Any, ClassVar, Dict, Optional, List
 
 from agent_analytics.core.data_composite.element import ElementComposite,_CREATION_TOKEN
 from agent_analytics.core.data_composite.issue import BaseIssue, IssueComposite
 from agent_analytics.core.data_composite.metric import BaseMetric, MetricComposite
 from agent_analytics.runtime.storage.store_interface import QueryFilter, QueryOperator
-from ibm_agent_analytics_common.interfaces.graph import Graph
-from ibm_agent_analytics_common.interfaces.metric import MetricType
-from ibm_agent_analytics_common.interfaces.task import Task, TaskStatus, TaskTag
+from agent_analytics_common.interfaces.graph import Graph
+from agent_analytics_common.interfaces.metric import MetricType
+from agent_analytics_common.interfaces.task import Task, TaskStatus, TaskTag
 from pydantic import Field
 
 from agent_analytics.core.data.task_data import TaskData
@@ -395,6 +395,12 @@ class HierarchicalTask(Task):
     # TODO: dependent_ids convert to dependencies_ids
     dependent_ids: list[str] = Field(default_factory=list, description="List of dependent task IDs")
 
+    #TODO: check if needed - backward compatability
+    metadata: Dict[str, Any] = Field(
+        default_factory=dict, 
+        description="A dictionary for additional metadata associated with the task"
+    )
+
     def __init__(self, base_task: Task | None = None, **data):
         if base_task:
             data.update(base_task.model_dump())
@@ -582,7 +588,7 @@ class HierarchicalTask(Task):
                 start_time=task.start_time,
                 end_time=task.end_time,
                 events=task.events,
-                metrics=task.metrics,
+                #metrics=task.metrics,
                 parent_id=task.parent_id,
                 dependent_ids=task.dependent_ids,
                 log_reference=task.log_reference,

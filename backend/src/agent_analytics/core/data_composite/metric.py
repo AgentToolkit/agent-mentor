@@ -4,7 +4,7 @@ from abc import ABC, ABCMeta
 from datetime import datetime
 from typing import Any, ClassVar, Literal
 
-from ibm_agent_analytics_common.interfaces.metric import (
+from agent_analytics_common.interfaces.metric import (
     AggregatedStats,
     BasicStatsMetric,
     DistributionMetric,

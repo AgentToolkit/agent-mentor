@@ -1,6 +1,6 @@
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.action import ActionKind
+from agent_analytics_common.interfaces.action import ActionKind
 
 from agent_analytics.core.data_composite.action import BaseAction
 from agent_analytics.extensions.spans_processing.common.langfuse import LangfuseObservationType

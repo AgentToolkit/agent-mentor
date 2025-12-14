@@ -2,7 +2,7 @@ from collections import defaultdict
 from itertools import combinations
 
 import pandas as pd
-from ibm_agent_analytics_common.interfaces.iunits import NodeType, RelationType
+from agent_analytics_common.interfaces.iunits import NodeType, RelationType
 from pydantic import BaseModel, Field
 
 from agent_analytics.core.data_composite.action import BaseAction

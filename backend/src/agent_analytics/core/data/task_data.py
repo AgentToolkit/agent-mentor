@@ -1,5 +1,5 @@
 from typing import List, Any
-from ibm_agent_analytics_common.interfaces.task import Task
+from agent_analytics_common.interfaces.task import Task
 from pydantic import Field
 
 from agent_analytics.core.data.element_data import ElementData

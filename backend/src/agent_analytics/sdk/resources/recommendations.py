@@ -6,7 +6,7 @@ Provides methods for creating and querying recommendations.
 
 from typing import Any
 
-from ibm_agent_analytics_common.interfaces.recommendations import RecommendationLevel
+from agent_analytics_common.interfaces.recommendations import RecommendationLevel
 
 from agent_analytics.core.data_composite.recommendation import (
     BaseRecommendation,

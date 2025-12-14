@@ -1,7 +1,7 @@
 import json
 from typing import Any, ClassVar
 
-from ibm_agent_analytics_common.interfaces.iunits import RelationType
+from agent_analytics_common.interfaces.iunits import RelationType
 from pydantic import Field
 
 from agent_analytics.core.data.workflow_node_gateway import WorkflowNodeGatewayData
