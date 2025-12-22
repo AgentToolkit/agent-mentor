@@ -175,7 +175,7 @@ Access the platform at: http://localhost:8765
 ### Key Technologies
 
 - **SDK**: Python, OpenTelemetry, Pydantic
-- **Backend**: FastAPI, SQLAlchemy, Polars (analytics)
+- **Backend**: FastAPI, Python
 - **Frontend**: React, TypeScript
 - **Storage**: Elasticsearch (persistent), In-memory (development)
 - **Tracing**: Jaeger, OTLP collectors
